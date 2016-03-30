@@ -12,6 +12,14 @@ public class City {
 	private BigDecimal latitude;
 	private BigDecimal longitude;
 	
+	public City(){
+		super();
+	}
+	
+	public City(Integer id){
+		super();
+		this.id = id;
+	}
 	
 	public Integer getId() {
 		return id;

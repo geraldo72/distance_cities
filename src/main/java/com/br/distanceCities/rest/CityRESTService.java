@@ -1,7 +1,5 @@
 package com.br.distanceCities.rest;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,7 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.br.distanceCities.db.CityDAO;
+import com.br.distanceCities.db.CrudDAO;
+import com.br.distanceCities.db.impl.CityDAO;
+import com.br.distanceCities.exception.DatabaseException;
 import com.br.distanceCities.model.City;
 
 @Path("/cities")
@@ -21,73 +21,50 @@ public class CityRESTService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAllCities() {
-    	CityDAO dao = new CityDAO();
-    	List<City> retorno = dao.buscarTodos();
+    public Response listAllCities() throws DatabaseException {
+    	CrudDAO<City> dao = new CityDAO();
+    	Iterable<City> retorno = dao.listAll();
         return Response.ok(retorno).build();
     }
     
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response lookupMemberById(@PathParam("id") Integer id) {
-
-    	return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response lookupMemberById(@PathParam("id") Integer id) throws DatabaseException {
+    	CrudDAO<City> dao = new CityDAO();
+    	City retorno = dao.findFirst(new City(id));
+        return Response.ok(retorno).build();
     }
     
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    public Response insertCity(City city){
-    	System.out.println(city.getId());
-    	System.out.println(city.getName());
-    	System.out.println(city.getLatitude());
-    	System.out.println(city.getLongitude());
-    	return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response insertCity(City city) throws DatabaseException{
+    	CrudDAO<City> dao = new CityDAO();
+    	City retorno = dao.insert(city);
+        return Response.ok(retorno).build();
     }
     
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    public Response updateCity(@PathParam("id") Integer id, City city){
-    	System.out.println(id);
-    	System.out.println(city.getId());
-    	System.out.println(city.getName());
-    	System.out.println(city.getLatitude());
-    	System.out.println(city.getLongitude());
-    	return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response updateCity(@PathParam("id") Integer id, City city) throws DatabaseException{
+    	CrudDAO<City> dao = new CityDAO();
+    	city.setId(id);
+    	dao.update(city);
+    	
+    	City retorno = dao.findFirst(new City(id));
+        return Response.ok(retorno).build();
     }
     
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
-    public Response deleteCity(@PathParam("id") Integer id){
-
-    	System.out.println(id);
-    	return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response deleteCity(@PathParam("id") Integer id) throws DatabaseException{
+    	CrudDAO<City> dao = new CityDAO();
+    	dao.delete(new City(id));
+        return Response.ok().build();
     }
 
-    /**
-     * EXEMPLOS
-     */
-
-    @GET
-    @Path("/{id:[0-9][0-9]*}/{id2:[0-9][0-9]*}")
-    public Response getTwoParam(@PathParam("id") Integer id,@PathParam("id2") Integer id2){
-    	System.out.println("id1="+id);
-    	System.out.println("id2="+id2);
-    	return Response.status(Response.Status.NOT_IMPLEMENTED).build();
-    }
-    @GET
-    @Path("/{type:[JX]}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response example(@PathParam("type") String type) {
-    	City c = new City();
-    	c.setId(99999);
-    	c.setName("Sampa");
-    	String mediaType = type.equalsIgnoreCase("J")?MediaType.APPLICATION_JSON:MediaType.APPLICATION_XML;
-    	
-    	return Response.ok(c, mediaType).build();
-    }
 }
