@@ -1,68 +1,85 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Cities</title>
-<link rel="stylesheet" href="content/css/styles.css" />
-	<!-- ========= -->
-	<!-- Libraries -->
-	<!-- ========= -->
-	<script src="content/js/jquery-1.12.2.min.js" type="text/javascript"></script>
-	<script src="content/js/jquery.mask.min.js" type="text/javascript"></script>
-	<script src="content/js/underscore-min.js" type="text/javascript"></script>
-	<script src="content/js/backbone-min.js" type="text/javascript"></script>
-</head>
-<body>
-	<!-- ========= -->
-	<!-- Your HTML -->
-	<!-- ========= -->
-	
-	<div id="sidebar"></div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Cities</title>
+    <link rel="stylesheet" href="content/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="content/css/styles.css" />
+        <!-- ========= -->
+        <!-- Libraries -->
+        <!-- ========= -->
+        <script src="content/js/jquery-1.12.2.min.js" type="text/javascript"></script>
+        <script src="content/js/jquery.mask.min.js" type="text/javascript"></script>
+        <script src="content/js/underscore-min.js" type="text/javascript"></script>
+        <script src="content/js/backbone-min.js" type="text/javascript"></script>
+        <script src="content/js/bootstrap.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <!-- ========= -->
+        <!-- Your HTML -->
+        <!-- ========= -->
+        
+        <div id="header"></div>
+        <div class="container">
+            
+            <h2>Cities</h2>
+            
+            
+            <div id="sidebar"></div>
+            
+            <div id="content"></div>
 
-	<div id="content"></div>
+            <div id="footer"></div>
+        </div>
 
-	<!-- Templates -->
-	<script type="text/template" id="tpl-header">
-		<button class="new">New City</button>
-	</script>
+        <!-- Templates -->
+        <script type="text/template" id="tpl-header">
 
-	<script type="text/template" id="tpl-city-list-item">
-		<a href='#cities/<%= id %>'><%= name %></a>
-	</script>
-	
-	<script type="text/template" id="tpl-city-select-item">
-		<option value='<%= id %>'>><%= name %></option>
-	</script>
+            <ul class="nav nav-pills">
+              <li role="presentation"><a href="index.html">Distance</a></li>
+              <li role="presentation" class="active"><a href="#">City</a></li>
+            </ul>
+            <button class="new btn btn-default">New City</button>
+        </script>
+        
 
-	<script type="text/template" id="tpl-city-details">
+        <script type="text/template" id="tpl-city-list-item">
+            <a href='#cities/<%= id %>' class="list-group-item"><%= name %></a>
+        </script>
 
-		<div class="form-left-col">
-			<label>Id:</label>
-			<input type="text" id="cityId" name="id" value="<%= id %>" disabled />
-			<label>Name:</label>
-			<input type="text" id="name" name="name" value="<%= name %>" required/>
-			<label>Latitude:</label>
-			<input type="text" id="latitude" name="latitude" value="<%= latitude %>" required/>
-			<label>Longitude:</label>
-			<input type="text" id="longitude" name="longitude" value="<%= longitude %>"  required/>
+        <script type="text/template" id="tpl-city-details">
 
-			<button class="save">Save</button>
-			<button class="delete">Delete</button>
-		</div>
+            <div class="form-left-col">
+                <div class="form-group">
+                    <label for="cityId">Id:</label> 
+                    <input type="text" id="cityId" name="id"  class="form-control" value="<%= id %>" disabled />
+                </div>
+                <div class="form-group">
+                    <label for="cityId">Name:</label> 
+                    <input type="text" id="name" name="name"  class="form-control" value="<%= name %>" required />
+                </div>
+                <div class="form-group">
+                    <label for="cityId">Latitude:</label> 
+                    <input type="text" id="latitude" name="latitude"  class="form-control" value="<%= latitude %>" required />
+                </div>
+                <div class="form-group">
+                    <label for="cityId">Longitude:</label> 
+                    <input type="text" id="longitude" name="longitude"  class="form-control" value="<%= longitude %>" required />
+                </div>
+                <div class="btn-group" role="group">
+                  <button type="button" class="save btn btn-default">Save</button>
+                  <button type="button" class="delete btn btn-default" <%if(id == null)%>disabled<%else%>>Delete</button>
+                </div>
+            </div>
 
-	</script>
+        </script>
 
 
-	<!-- =============== -->
-	<!-- Javascript code -->
-	<!-- =============== -->
-	<script src="content/js/cities.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		$(document).ready({
-			$("#latitude").mask('00.00000000');
-			$("#longitude").mask('000.00000000');
-		});
-	</script>
-</body>
-</html>
+        <!-- =============== -->
+        <!-- Javascript code -->
+        <!-- =============== -->
+        <script src="content/js/cities.js" type="text/javascript"></script>
+
+    </body>
+    </html>

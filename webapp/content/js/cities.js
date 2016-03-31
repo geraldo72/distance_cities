@@ -1,13 +1,4 @@
 // Models
-window.Distance = Backbone.Model.extend({
-    urlRoot:"rest/distance"
-});
-
-window.DistanceCollection = Backbone.Collection.extend({
-    model:Distance,
-    url:"rest/distance"
-});
-
 window.City = Backbone.Model.extend({
     urlRoot:"rest/cities",
     defaults:{
@@ -27,7 +18,8 @@ window.CityCollection = Backbone.Collection.extend({
 // Views
 window.CityListView = Backbone.View.extend({
 
-    tagName:'ul',
+    tagName:'div',
+    className:"list-group",
 
     initialize:function () {
         this.model.bind("reset", this.render, this);
@@ -47,7 +39,7 @@ window.CityListView = Backbone.View.extend({
 
 window.CityListItemView = Backbone.View.extend({
 
-    tagName:"li",
+    tagName:"div",
 
     template:_.template($('#tpl-city-list-item').html()),
 
@@ -137,25 +129,31 @@ window.CityView = Backbone.View.extend({
 });
 
 window.HeaderView = Backbone.View.extend({
-
-   initialize:function () {
+	 
+    template:_.template($('#tpl-header').html()),
+ 
+    initialize:function () {
         this.render();
     },
-
+ 
     render:function (eventName) {
         $(this.el).html(this.template());
         return this;
     },
-
+ 
     events:{
         "click .new":"newCity"
     },
-
+ 
     newCity:function (event) {
-        app.navigate("cities/new", true);
+        if (app.cityView) app.cityView.close();
+        app.cityView = new CityView({model:new City()});
+        $('#content').html(app.cityView.render().el);
         return false;
     }
 });
+
+
 
 
 // Router
@@ -165,9 +163,6 @@ var AppRouter = Backbone.Router.extend({
         "":"list",
         "cities/new":"newCity",
         "cities/:id":"cityDetails",
-        "distance":"distanceAllCity",
-        "cities/:id":"distanceOneCity",
-        "cities/:id1/:id2":"distanceTwoCity"
     },
 
     initialize:function () {
@@ -202,42 +197,6 @@ var AppRouter = Backbone.Router.extend({
         if (app.cityView) app.cityView.close();
         app.cityView = new CityView({model:new City()});
         $('#content').html(app.cityView.render().el);
-    },
-    
-    distanceAllCity:function () {
-    	this.distanceList = new DistanceCollection();
-        var self = this;
-        this.distanceList.fetch({
-            success:function () {
-                self.cityListView = new DistanceListView({model:self.cityList});
-                $('#distance').html(self.cityListView.render().el);
-                if (self.requestedId) self.cityDetails(self.requestedId);
-            }
-        });
-    },
-    
-    distanceOneCity:function (id) {
-        if (this.cityList) {
-            this.city = this.cityList.get(id);
-            if (this.cityView) this.cityView.close();
-            this.cityView = new CityView({model:this.city});
-            $('#content').html(this.cityView.render().el);
-        } else {
-            this.requestedId = id;
-            this.list();
-        }
-    },
-    
-    distanceTwoCity:function (id1,id2) {
-        if (this.cityList) {
-            this.city = this.cityList.get(id);
-            if (this.cityView) this.cityView.close();
-            this.cityView = new CityView({model:this.city});
-            $('#content').html(this.cityView.render().el);
-        } else {
-            this.requestedId = id;
-            this.list();
-        }
     }
 
 });

@@ -3,47 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Hello World using Backbone.js</title>
+<title>Distance</title>
+<link rel="stylesheet" href="content/css/bootstrap.min.css" />
 <link rel="stylesheet" href="content/css/styles.css" />
-	<!-- ========= -->
-	<!-- Libraries -->
-	<!-- ========= -->
-	<script src="content/js/jquery-1.12.2.min.js" type="text/javascript"></script>
+<!-- ========= -->
+<!-- Libraries -->
+<!-- ========= -->
+<script src="content/js/jquery-1.12.2.min.js" type="text/javascript"></script>
+<script src="content/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-	<button id="ajax">ajax call</button>
-	<button id="json">json</button>
-	
-	<select id="retType">
-		<option value="xml">XML</option>
-		<option value="json">JSON</option>
-	</select>
-	
-	<select id="unit">
-		<option value="km">KM</option>
-		<option value="mi">MI</option>
-	</select>
-	
-	<textarea id="response"></textarea>
+    <div id="header">
+        <ul class="nav nav-pills">
+          <li role="presentation" class="active"><a href="#">Distance</a></li>
+          <li role="presentation"><a href="city.html">City</a></li>
+        </ul>
+    </div>
+	<div class="container">
+		<h2>Distance</h2>
+		<div class="form-group">
+			<label for="city1">City 1:</label> 
+			<select class="form-control" id="city1">
+				<option value="">Select city</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="city2">City 2:</label> 
+			<select class="form-control" id="city2">
+				<option value="">Select city</option>
+			</select>
+		</div>
 
-<script type="text/javascript">
-    $('#json').click(function(){ 
-        var returnType = $("#retType").val();
-        var measureUnit = $("#unit").val();
-         $.getJSON("rest/distance?returnType="+returnType+"&measureUnit="+measureUnit,
+		<div class="form-group">
+			<label for="retType">Response Type:</label> 
+			<select class="form-control" id="retType">
+				<option value="xml">XML</option>
+				<option value="json">JSON</option>
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="unit">Measure Unit:</label> 
+			<select class="form-control" id="unit">
+				<option value="km">KM</option>
+				<option value="mi">MI</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<button id="ajax" class="btn btn-default">Get Distance</button>
+		</div>
+		
+		<div class="form-group">
+			<textarea class="form-control response" rows="10"></textarea>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+    
+    $(document).ready(function(){
+        $.getJSON("rest/cities",
+                  {},
          function(data) {
-            $("#response").html(data);         
-          });   
-    });
+             var $select = $('#city1');      
+             var $select2 = $('#city2');      
+             
+            $.each(data, function(key, value) {              
+                var option = $('<option>').val(value.id).text(value.name);
+                $select.append(option);   
+            });       
+          }); 
+        
+        $('#city1').bind("change", function(){
+            $('#city2').find('option').remove();
+            if(this.value != ""){
 
+               $(this).find('option').each(function (){
+                    if($('#city1').val() != this.value){
+                        
+                        $('#city2').append($(this).clone()); 
+                    }
+               });
+           }
+        });
+                
+    });
+    
     $('#ajax').click(function(){ 
         var returnType = $("#retType").val();
         var measureUnit = $("#unit").val();
-         $.ajax({ 
+        var city1 = $('#city1').val();      
+        var city2 = $('#city2').val();
+        var url = "rest/distance";
+        
+        if(city1 != ""){
+            url += "/"+city1;
+        }
+        if(city2 != ""){
+            url += "/"+city2;
+        }
+        
+        $.ajax({ 
              type: "GET",
-             url: "rest/distance?returnType="+returnType+"&measureUnit="+measureUnit,
-             success: function(data){     
-                 $("#response").html(data);   
+             url: url+"?returnType="+returnType+"&measureUnit="+measureUnit,
+             success: function(result,status,xhr){     
+                $('.response').html("<![CDATA["+xhr.responseText+"]]>");
              }
          });
     });
