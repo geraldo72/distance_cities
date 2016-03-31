@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,6 +17,7 @@ import com.br.distanceCities.db.CrudDAO;
 import com.br.distanceCities.db.impl.CityDAO;
 import com.br.distanceCities.enums.ReturnType;
 import com.br.distanceCities.enums.Unit;
+import com.br.distanceCities.exception.ApplicationException;
 import com.br.distanceCities.exception.DatabaseException;
 import com.br.distanceCities.exception.DistanceException;
 import com.br.distanceCities.model.City;
@@ -30,7 +30,7 @@ public class DistanceRESTService {
     @Path("/{id:[0-9][0-9]*}/{id2:[0-9][0-9]*}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public Response listOneDistance(@PathParam("id") Integer id,@PathParam("id2") Integer id2,
-    		@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) {
+    		@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) throws ApplicationException {
     	validateQueryParam(returnType,measureUnit);
 
     	Unit unitEnum = Unit.fromName(measureUnit);
@@ -48,9 +48,9 @@ public class DistanceRESTService {
 			return Response.ok(distance,typeEnum.type()).build();
     	
     	}catch(DatabaseException e){
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
     	} catch (DistanceException e) {
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
 		}
     	
     }
@@ -59,7 +59,7 @@ public class DistanceRESTService {
     @Path("/{id:[0-9][0-9]*}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public Response listOneDistance(@PathParam("id") Integer id,
-    		@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) {
+    		@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) throws ApplicationException {
     	validateQueryParam(returnType,measureUnit);
     	
     	Unit unitEnum = Unit.fromName(measureUnit);
@@ -85,15 +85,15 @@ public class DistanceRESTService {
 	    		    ,typeEnum.type())
 	    			.build();
     	}catch(DatabaseException e){
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
     	} catch (DistanceException e) {
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
 		}
     }
 
 	@GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response listAllDistances(@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) {
+    public Response listAllDistances(@QueryParam("returnType") String returnType, @QueryParam("measureUnit") String measureUnit) throws ApplicationException {
 		validateQueryParam(returnType,measureUnit);
     	
     	Unit unitEnum = Unit.fromName(measureUnit);
@@ -110,9 +110,9 @@ public class DistanceRESTService {
 	    			,typeEnum.type())
 	    			.build();
     	}catch(DatabaseException e){
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
     	} catch (DistanceException e) {
-    		throw new WebApplicationException(e);
+    		throw new ApplicationException(e);
 		}
     }
 	
@@ -135,20 +135,20 @@ public class DistanceRESTService {
 		
 	}
 
-    private void validateQueryParam(String returnType, String measureUnit) {
+    private void validateQueryParam(String returnType, String measureUnit) throws ApplicationException {
     	if (returnType == null) {
-			throw new WebApplicationException("returnType parameter is mandatory");
+			throw new ApplicationException("returnType parameter is mandatory");
 			
 		}else if(returnType.isEmpty() || !("xml".equalsIgnoreCase(returnType) || "json".equalsIgnoreCase(returnType))){
-			throw new WebApplicationException("returnType parameter is invalid, only 'xml' or 'json' are available");
+			throw new ApplicationException("returnType parameter is invalid, only 'xml' or 'json' are available");
 		
 		}
     	
     	if (measureUnit == null) {
-			throw new WebApplicationException("measureUnit parameter is mandatory");
+			throw new ApplicationException("measureUnit parameter is mandatory");
 			
 		}else if(measureUnit.isEmpty() || !("km".equalsIgnoreCase(measureUnit) || "mi".equalsIgnoreCase(measureUnit))){
-			throw new WebApplicationException("measureUnit parameter is invalid, only 'km' or 'mi' are available");
+			throw new ApplicationException("measureUnit parameter is invalid, only 'km' or 'mi' are available");
 		
 		}
 	}
