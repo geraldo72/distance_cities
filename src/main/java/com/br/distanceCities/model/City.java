@@ -1,6 +1,7 @@
 package com.br.distanceCities.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,5 +46,17 @@ public class City {
 	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
+	
+	@Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof City)) {
+            return false;
+        }
+
+        City other = (City) obj;
+        return (Objects.equals(this.id,other.id)
+                && Objects.equals(this.latitude,other.latitude)
+                && Objects.equals(this.longitude,other.longitude));
+    }
 
 }

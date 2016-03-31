@@ -111,7 +111,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 	}
 
 	@Override
-	public Iterable<City> listAll() throws DatabaseException{
+	public List<City> listAll() throws DatabaseException{
 		List<City> resultados = new ArrayList<City>();
 		String sql = "SELECT id,name,latitude,longitude FROM java.city";
 		
@@ -139,7 +139,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 	}
 
 	@Override
-	public Iterable<City> findBy(City request) throws DatabaseException {
+	public List<City> findBy(City request) throws DatabaseException {
 		List<City> resultados = new ArrayList<City>();
 		String sql = "SELECT id,name,latitude,longitude FROM java.city where "
 				+ "(? IS NULL or id = ?) and "
@@ -185,9 +185,9 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 	
 	@Override
 	public City findFirst(City request) throws DatabaseException{
-		Iterable<City> resultado = findBy(request);
-		if(resultado.iterator().hasNext()){
-			return resultado.iterator().next();
+		List<City> resultado = findBy(request);
+		if(!resultado.isEmpty()){
+			return resultado.get(0);
 		}
 		return null;
 	}
