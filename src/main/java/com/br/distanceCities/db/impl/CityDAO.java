@@ -130,6 +130,9 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 				temp.setLongitude(rs.getBigDecimal("longitude"));
 				resultados.add(temp);
 			}
+			if(resultados.isEmpty()){
+				throw new DatabaseException("Nenhum registro encontrado");
+			}
 			return resultados;
 		} catch (SQLException e) {
 			throw new DatabaseException("Erro ao buscar todas cidades", e);
@@ -174,6 +177,9 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 				temp.setLatitude(rs.getBigDecimal("latitude"));
 				temp.setLongitude(rs.getBigDecimal("longitude"));
 				resultados.add(temp);
+			}
+			if(resultados.isEmpty()){
+				throw new DatabaseException("Nenhum registro encontrado");
 			}
 			return resultados;
 		} catch (SQLException e) {
