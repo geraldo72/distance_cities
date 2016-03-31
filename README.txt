@@ -53,9 +53,13 @@ The system provides two REST webservices:
 
 Scripts:
 
+drop database java;
 CREATE DATABASE java;
-CREATE USER 'teste'@'localhost' IDENTIFIED BY 'teste';
-GRANT DELETE,INSERT, SELECT, UPDATE  ON java . * TO 'teste'@'localhost';
+
+drop user teste;
+flush privileges;
+create user teste identified by 'teste';
+GRANT DELETE,INSERT, SELECT, UPDATE  ON java.* TO teste;
 
 CREATE TABLE java.CITY (
   'id' INT NOT NULL AUTO_INCREMENT COMMENT 'Id of the city',
