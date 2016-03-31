@@ -77,11 +77,12 @@ public class CityRESTService {
 
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}")
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response deleteCity(@PathParam("id") Integer id) throws ApplicationException {
 		try {
 			CrudDAO<City> dao = new CityDAO();
 			dao.delete(new City(id));
-			return Response.ok().build();
+			return Response.ok(id).build();
 		} catch (DatabaseException e) {
 			throw new ApplicationException(e);
 		}
