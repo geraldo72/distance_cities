@@ -14,10 +14,12 @@ import com.br.distanceCities.exception.DatabaseException;
 import com.br.distanceCities.model.City;
 
 public class CityDAO extends JdbcDAO implements CrudDAO<City>{
+	
+	private static final String TABLE_NAME = "java.City";
 
 	@Override
 	public City insert(City request) throws DatabaseException{
-		String sql = "INSERT INTO java.City (name,latitude,longitude) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO "+TABLE_NAME+" (name,latitude,longitude) VALUES (?, ?, ?)";
 		
 		
 		PreparedStatement statement = null;
@@ -57,7 +59,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 
 	@Override
 	public void delete(City request) throws DatabaseException {
-		String sql = "DELETE FROM java.City WHERE id=?";
+		String sql = "DELETE FROM "+TABLE_NAME+" WHERE id=?";
 
 		PreparedStatement statement = null;
 		Connection connection = null;
@@ -82,7 +84,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 
 	@Override
 	public void update(City request) throws DatabaseException {
-		String sql = "UPDATE java.City SET name=?, latitude=?, longitude=? WHERE id=?";
+		String sql = "UPDATE "+TABLE_NAME+" SET name=?, latitude=?, longitude=? WHERE id=?";
 
 		PreparedStatement statement = null;
 		Connection connection = null;
@@ -113,7 +115,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 	@Override
 	public List<City> listAll() throws DatabaseException{
 		List<City> resultados = new ArrayList<City>();
-		String sql = "SELECT id,name,latitude,longitude FROM java.city";
+		String sql = "SELECT id,name,latitude,longitude FROM "+TABLE_NAME+"";
 		
 		ResultSet rs = null;
 		PreparedStatement statement = null;
@@ -144,7 +146,7 @@ public class CityDAO extends JdbcDAO implements CrudDAO<City>{
 	@Override
 	public List<City> findBy(City request) throws DatabaseException {
 		List<City> resultados = new ArrayList<City>();
-		String sql = "SELECT id,name,latitude,longitude FROM java.city where "
+		String sql = "SELECT id,name,latitude,longitude FROM "+TABLE_NAME+" where "
 				+ "(? IS NULL or id = ?) and "
 				+ "(? IS NULL or name = ?) and "
 				+ "(? IS NULL or latitude = ?) and "
