@@ -1,3 +1,6 @@
+# distance_cities
+Projeto para cálculo de distancia entre duas cidades, baseado na latitude/longitude
+
 Distância:
 Foi utilizado a formula de Vincenty para calculo da distancia entre duas cordenadas (latitude/longitude).
 Ela foi escolhida pois é mais precisa por levar em conta que o formato da terra não é uma esfera, como a formula Grande-Circulo considera, e sim um elipsoide.
@@ -51,6 +54,9 @@ O sistema disponibiliza dois webservices REST:
    		returnType - formato da reposta - Valores validos: xml, json
    		measureUnit - unidade de medida utilizada para distância - Valores validos: km, mi
  
+ Duas paginas para testar os servicos REST:
+	- /distance_cities/index.html - Pagina para testar distancia
+	- /distance_cities/city.html - Pagina para testar cidade
 
 Scripts:
 

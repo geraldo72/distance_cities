@@ -1,3 +1,6 @@
+# distance_cities
+Project for distance calculation between two cities, using latitude/longitude.
+
 Distance:
 The formula to calculate the distance between two coordinates (latitude / longitude) is the Vincenty's formulae .
 It was selected because it has a higher precision due to calculation was based on ellipsoid, which is the geometric shape of the earth and not an sphere which is used on Great-Circle formula.
@@ -50,6 +53,10 @@ The system provides two REST webservices:
    Two mandatory parameters, case insentive:
    		returnType - Type of response - Valid values: xml,json
    		measureUnit - Measure unit used for distance - Valid values: km/mi
+   		
+Two webpages for testing REST services:
+	- /distance_cities/index.html - Distance page
+	- /distance_cities/city.html - City page
 
 Scripts:
 
@@ -78,5 +85,32 @@ VALUES
 ("Las Vegas",36.062925, -115.016261),
 ("Stockholm",59.329292, 18.068564);
 
+Installation:
+ - With Maven:
+    Download all files on GitHub (https://github.com/geraldo72/distance_cities)
+	Configure MySql connection properties file 'connection.properties' (src/main/resources/)
+ 		Default configuration properties, if system don't find the configuration file:
+ 			- host: localhost
+ 			- port: 3306
+ 			- user: teste
+ 			- password: teste
+ 	Configure pom.xml file (Project root folder):
+ 		- tomcat.dir - Tomcat server folder
+ 		- output.dir - WAR output folder. Default configuration is webapps folder of tomcat server
+	On downloaded project folder, execute mvn command with goals 'clean compile package'
+	Start server, if is stopped.
+
+ - With WAR:
+ 	Download 'distance_cities.war' file, sent by email or located on GitHub (https://github.com/geraldo72/distance_cities/disp)
+	Configure MySql connection properties  file 'connection.properties' inside war (distance_cities.war/WEB-INF/classes)
+ 	Configurar o arquivo 'connection.properties' dentro do war (distance_cities.war/WEB-INF/classes) com os dados do MySQL utilizado.
+		Default configuration properties, if system don't find the configuration file:
+ 			- host: localhost
+ 			- port: 3306
+ 			- user: teste
+ 			- password: teste
+ 	Save file inside WAR.
+	Copy WAR file to tomcat deploy folder (/webapps)
+	Start server, if is stopped.
 
 
