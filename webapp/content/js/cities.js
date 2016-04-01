@@ -6,6 +6,12 @@ window.City = Backbone.Model.extend({
         "name":"",
         "latitude":"",
         "longitude":""
+    },
+    validateData:function(){
+        if(this.attributes.name == "") return false;
+        if(this.attributes.latitude == "" || this.attributes.latitude > 90 || this.attributes.latitude < -90) return false;
+        if(this.attributes.longitude == "" || this.attributes.longitude > 180 || this.attributes.longitude < -180) return false;   
+        return true;
     }
 });
 
@@ -93,18 +99,31 @@ window.CityView = Backbone.View.extend({
             latitude:$('#latitude').val(),
             longitude:$('#longitude').val()
         });
+        if(!this.model.validateData()){
+            alert("City with invalid info.");
+            return false;
+        }
+            
+            
         if (this.model.isNew()) {
             var self = this;
             app.cityList.create(this.model, {
                 success:function () {
                     alert('City added successfully');
                     app.navigate('cities/' + self.model.id, false);
+                },
+                error: function(model, response){
+                    alert(response.responseJSON.message);
                 }
             });
         } else {
-            this.model.save({
+            this.model.save(
+                {},{
                 success:function () {
                     alert('City updated successfully');
+                },
+                error: function(model, response){
+                    alert(response.responseJSON.message);
                 }
             });
         }
@@ -117,7 +136,11 @@ window.CityView = Backbone.View.extend({
             success:function () {
                 alert('City deleted successfully');
                 if (app.cityView) app.cityView.close();
+            },
+            error: function(model, response){
+                alert(response.responseJSON.message);
             }
+        	
         });
         return false;
     },
