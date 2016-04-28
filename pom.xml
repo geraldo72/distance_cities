@@ -27,7 +27,6 @@
 				<version>2.6</version>
 				<configuration>
 					<warSourceDirectory>webapp</warSourceDirectory>
-					<outputDirectory>${output.dir}</outputDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<webResources>
 						<resource>
